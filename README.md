@@ -13,7 +13,7 @@
 
 
 ## General Information
-En este proyecto, se ha creado un API REST, la cual se encarga de leer y escribir archivos sobre una base de datos local, este trabajo se ha realizado como ejercicio práctico para el cargo de Ingeniero de Datos en Globant
+In this project, a REST API has been created, which is responsible for reading and writing files to a local database. This work has been carried out as a practical exercise for the position of Data Engineer at Globant.
 <!-- You don't have to answer all the questions - just the ones relevant to your project. -->
 
 
@@ -30,34 +30,35 @@ En este proyecto, se ha creado un API REST, la cual se encarga de leer y escribi
 
 ## Features
 List the ready features here:
-- Validación de duplicados
-- Escritura en un solo request
-- Lectura masiva de datos
+- Duplicate validation
+- Writing in a single request
+- Massive data reading
 
 
 ## Setup
-Este proyecto corre sobre una base de datos local MySQL la cual corre sobre el puerto 3306, para poder ejecutar este proyecto es necesario previamente instalar:
+This project runs on a local MySQL database, which runs on port 3306. To execute this project, it is necessary to install the following:
 
-- XAMPP - Para poder encender nuestro servidor Apache
-- MYSQL - Para Alojar nuestras bases de datos
-- Python 3.10 o superior - Para ejecutar nuestro código Python
-- Postman o Insomnia - PAra poder enviar llamados al API REST
+- XAMPP - To turn on our Apache server
+- MySQL - To host our databases
+- Python 3.10 or higher - To run our Python code
+- Postman or Insomnia - To send calls to the REST API
 
 
 ## Usage
 
-Para usar el código debemos ejecutar el archivo app.py, este archivo ejecutará el host local de nuestra aplicación. Una vez ejecutado, debemos fijarnos en los logs del terminal, ya que allí podremos ver la ruta en la que está corriendo nuestro código
+To use the code, we need to run the file app.py, which will start the local host of our application. Once executed, we should check the logs in the terminal, as we can find the route where our code is running there
 [![Visual Log Screenshot][visual-screenshot]]
 
 `Running on http://127.0.0.1:5000`
 
-Una vez ejecutemos nuestro código, procedemos a copiar la ruta del localhost mencionada anteriormente en Postman, esta ruta será nuestro endpoint. Este endpoint recibe un request de tipo POST con los siguientes parametros parametros:
-- `filename` - Nombre del archivo en formato CSV a Procesar
-- `table` - Nombre de la tabla en la cual se deben cargar los registros leídos.
+Once we execute our code, we proceed to copy the localhost URL mentioned earlier into Postman; this URL will be our endpoint. This endpoint receives a POST request with the following parameters:
+
+- `filename` - Name of the CSV file to be processed.
+- `table` - Name of the table into which the read records should be loaded.
 [![Postnam Request Screenshot][postman-screenshot]]
 
 
-El API arrojará un log con la cantidad de registros escritos sobre la base de datos, en caso de que el archivo o la tabla especificada no existan, se mostrará en los logs con su respectivo mensaje.
+The API will output a log with the number of records written to the database. In case the specified file or table does not exist, it will be displayed in the logs along with its respective message.
 
 ## Contact
 Created by [@JhonGM](https://www.linkedin.com/in/jhon-brayan-gonzalez-montoya-b2657b182/) - feel free to contact me!
