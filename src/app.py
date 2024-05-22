@@ -2,10 +2,11 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from transform_data import read_files
+from pymysql import IntegrityError
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    "mysql+pymysql://root:password@localhost/flaskmysql"
+    "mysql+pymysql://root:password@localhost/gl-test"
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -87,7 +88,8 @@ class hired_employeesSchema(ma.Schema):
 job_schema = hired_employeesSchema()
 job_schema = hired_employeesSchema(many=True)
 
-#Create / Insert Tables
+# Create / Insert Tables
+
 
 @app.route("/create", methods=["POST"])
 def create_task():
@@ -95,61 +97,50 @@ def create_task():
     file = request.json["filename"]
     table = request.json["table"]
 
-    if table == "departments":
-        json_data = read_files(file)
-        for n in range(len(json_data)):
-            id = json_data[n]["id"]
-            department = json_data[n]["department"]
-            new_task = departments(id, department)
-            db.session.add(new_task)
-            db.session.commit()
+    data = read_files(file)
 
-        return department_schema.jsonify(new_task)
+    if table == "departments":
+        for n in range(len(data)):
+            id = data[n]["id"]
+            department = data[n]["department"]
+            try:
+                new_task = departments(id, department)
+                db.session.add(new_task)
+                db.session.commit()
+                return f"writing {len(data)} records on {table} table"
+            except IntegrityError:
+                return f"duplicate data for {table} table"
 
     if table == "jobs":
 
-        json_data = read_files(file)
-        for n in range(len(json_data)):
-            id = json_data[n]["id"]
-            job = json_data[n]["job"]
-            new_task = jobs(id, job)
-            db.session.add(new_task)
-            db.session.commit()
+        for n in range(len(data)):
+            id = data[n]["id"]
+            job = data[n]["job"]
+            try:
+                new_task = jobs(id, job)
+                db.session.add(new_task)
+                db.session.commit()
+                return f"writing {len(data)} records on {table} table"
+            except IntegrityError:
+                return f"duplicate data for {table} table"
 
-        return department_schema.jsonify(new_task)
-    
     if table == "hired_employees":
 
-        json_data = read_files(file)
-        for n in range(len(json_data)):
-            id = json_data[n]["id"]
-            name = json_data[n]["name"]
-            datetime = json_data[n]["datetime"]
-            department_id = json_data[n]["department_id"]
-            job_id = json_data[n]["job_id"]
+        for n in range(len(data)):
+            id = data[n]["id"]
+            name = data[n]["name"]
+            datetime = data[n]["datetime"]
+            department_id = data[n]["department_id"]
+            job_id = data[n]["job_id"]
             new_task = hired_employees(id, name, datetime, department_id, job_id)
             db.session.add(new_task)
             db.session.commit()
 
-        return department_schema.jsonify(new_task)
-    
+        return f"writing {len(data)} records on {table} table"
+
     else:
-        
-        return f'table {table} not exist'
 
-
-@app.route("/departments", methods=["GET"])
-def get_tasks():
-    all_task = departments.query.all()
-    result = departments_schema.dump(all_task)
-
-    return jsonify(result)
-
-
-@app.route("/departments/<id>", methods=["GET"])
-def get_task(id):
-    task = departments.query.get(id)
-    return department_schema.jsonify(task)
+        return f"table {table} does not exist"
 
 
 if __name__ == "__main__":
